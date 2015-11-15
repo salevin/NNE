@@ -1,6 +1,6 @@
 Just some nueral network exercises from Fundamentals of Neural Networks: Architectures, Algorithms, and Applications.
 
-                                   ,▄▄▄
+                                           ,▄▄▄
                                        ▄▓█▀▀▀▀▀█▄
                ▄▄▓█`       ,▄▄▓▓▄▄▄▄▄@██▀!√√√√√└▀█▄
             .▓█▀██       #█▀▀└:.!╙▀▀██▀:√√√√√√√√√!▀▀█▓▓▄▄
