@@ -1,33 +1,51 @@
 import numpy as np
 
-import tensorflow as tf
-
-# Just mucking about, needs a huge change
-
 if __name__ == '__main__':
-    # Make 100 binary data-points in NumPy.
-    x_data = np.array([[1, 1, 0, 0], [1, 0, 1, 0]], dtype=np.float32)
-    y_data = np.array([1, -1, -1, 1], dtype=np.float32)
+    # Make a single epoch of AND
+    x_data = np.array([[1, 1, 0, 0], [1, 0, 1, 0], [1, 1, 1, 1]], dtype=np.int)
+    y_data = np.array([1, -1, -1, -1], dtype=np.int)
 
-    # Construct a linear model.
-    b = tf.Variable(tf.zeros([1]))
-    W = tf.Variable(tf.random_uniform([1, 2], -1.0, 1.0))
-    y = tf.matmul(W, x_data) + b
+    weights = np.zeros([3], dtype=np.int)
 
-    # Minimize the squared errors.
-    loss = tf.reduce_mean(tf.square(y - y_data))
-    optimizer = tf.train.GradientDescentOptimizer(0.5)
-    train = optimizer.minimize(loss)
+    epochs = input("Number of epochs (Try 10): ")
 
-    # For initializing the variables.
-    init = tf.initialize_all_variables()
+    bias = .2
 
-    # Launch the graph
-    sess = tf.Session()
-    sess.run(init)
+    learning_rate = 1
 
-    # Fit the plane.
-    for step in xrange(0, 201):
-        sess.run(train)
-        if step % 20 == 0:
-            print step, sess.run(W), sess.run(b)
+    for i in range(epochs):
+        for z in range(len(x_data[0])):
+            target = y_data[z]
+            x = x_data[:, z]
+            y_in = np.dot(x, weights)
+            y = 1 if y_in > bias else (0 if -bias <= y_in <= bias else -1)
+
+            if y != target:
+                change = learning_rate * x * target
+                weights = np.add(weights, change)
+
+    print("Weights are %s" % weights)
+
+    go_on = True
+    while go_on:
+        x1 = input("First binary input: ")
+        x2 = input("Second binary input: ")
+
+        x = np.array([x1, x2, 1])
+
+        y_in = np.dot(x, weights)
+        y = 1 if y_in > bias else (0 if -bias <= y_in <= bias else -1)
+
+        print(y)
+
+        want = raw_input("Want to continue? (y/n): ")
+
+        chosen = False
+        while not chosen:
+            if want.lower() == 'n':
+                go_on = False
+                chosen = True
+            elif want.lower() != 'y':
+                want = raw_input("What was that? (y/n): ")
+            else:
+                chosen = True
