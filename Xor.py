@@ -26,7 +26,6 @@ if __name__ == '__main__':
 
     y = tf.sigmoid(tf.matmul(hidden, W0) + b0)
 
-    entropy = -(y_ * tf.log(y) + (1 - y_) * tf.log(1 - y))
     loss = tf.reduce_mean(tf.square(y_ - y))
     optimizer = tf.train.AdamOptimizer(0.01)
     train = optimizer.minimize(loss)
@@ -35,10 +34,33 @@ if __name__ == '__main__':
     sess = tf.Session()  # create the session and therefore the graph
     sess.run(init)  # initialize all variables
 
-    for epoch in xrange(0, 100001):
+    for epoch in xrange(0, 25001):
         run = sess.run([train, loss, W, b, W, b0],
                        feed_dict={x: x_data, y_: y_data})
-        if epoch % 400 == 0:
-            print epoch, run, "\n"
+        if epoch % 1000 == 0:
+            print epoch, run
 
-            print("Erros is %s" % format(run[1]))
+            print("Loss is %s \n " % run[1])
+
+    print("\n")
+    go_on = True
+    while go_on:
+        x1 = input("First binary input: ")
+        x2 = input("Second binary input: ")
+
+        x_ = np.array([x1, x2], dtype=np.float32)
+
+        print("Input was %s" % x_)
+        print("Output is %.15f" % sess.run(y, feed_dict={x: [x_]}))
+
+        want = raw_input("Want to continue? (y/n): ")
+
+        chosen = False
+        while not chosen:
+            if want.lower() == 'n':
+                go_on = False
+                chosen = True
+            elif want.lower() != 'y':
+                want = raw_input("What was that? (y/n): ")
+            else:
+                chosen = True
