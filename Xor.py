@@ -1,4 +1,6 @@
 # TODO Work on a multilayer perceptron for XOR
+
+# House music and Redbull fuueeel
 import numpy as np
 import tensorflow as tf
 
@@ -20,25 +22,23 @@ if __name__ == '__main__':
     b0 = tf.Variable(tf.zeros([1]))
     W0 = tf.Variable(tf.random_uniform([hiddenDim, 1], -0.5, 0.5))
 
-    hidden = tf.nn.softmax(tf.matmul(x, W) + b)
+    hidden = tf.sigmoid(tf.matmul(x, W) + b)
 
-    y = tf.nn.softmax(tf.matmul(hidden, W0) + b0)
+    y = tf.sigmoid(tf.matmul(hidden, W0) + b0)
 
-    entropy = tf.square(y_ - y)
-    loss = tf.reduce_mean(entropy)
+    entropy = -(y_ * tf.log(y) + (1 - y_) * tf.log(1 - y))
+    loss = tf.reduce_mean(tf.square(y_ - y))
     optimizer = tf.train.AdamOptimizer(0.01)
     train = optimizer.minimize(loss)
 
     init = tf.initialize_all_variables()
+    sess = tf.Session()  # create the session and therefore the graph
+    sess.run(init)  # initialize all variables
 
-    sess = tf.Session()
-    sess.run(init)
-
-    sess = tf.Session()
-    sess.run(tf.initialize_all_variables())
-
-    for epoch in xrange(0, 2001):
+    for epoch in xrange(0, 100001):
         run = sess.run([train, loss, W, b, W, b0],
                        feed_dict={x: x_data, y_: y_data})
         if epoch % 400 == 0:
-            print epoch, run
+            print epoch, run, "\n"
+
+            print("Erros is %s" % format(run[1]))
