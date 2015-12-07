@@ -42,9 +42,9 @@ if __name__ == '__main__':
 
             print("Loss is %s \n " % run[1])
 
-    print("\n")
     go_on = True
     while go_on:
+        print("\n")
         x1 = input("First binary input: ")
         x2 = input("Second binary input: ")
 
